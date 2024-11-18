@@ -5,6 +5,7 @@ on:
     branches:
       # Change this if your production branch is not prod
       - prod
+      - update/5-use-docker-build-push-action
 
 permissions:
   contents: read
@@ -40,10 +41,16 @@ jobs:
         run: pnpm install --frozen-lockfile
       - name: Docker Auth
         run: ./deployment/utils/docker-auth.sh
-      - name: Build
+      - name: Build app
         run: ./deployment/api/build.sh
+      - name: Build and push Docker image
+        uses: docker/build-push-action@v6
+        with:
+          file: ./deployment/api/Dockerfile
+          context: ./
 
   deploy:
+    if: false
     name: Deploy api
     needs:
       - build
