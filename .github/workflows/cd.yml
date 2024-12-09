@@ -44,10 +44,13 @@ jobs:
       - name: Build app
         run: ./deployment/api/build.sh
       - name: Build and push Docker image
+        id: docker-build
         uses: docker/build-push-action@v6
         with:
           file: ./deployment/api/Dockerfile
           context: ./
+    outputs:
+      image: ${{ steps.docker-build.outputs.image }}
 
   deploy:
     if: false
