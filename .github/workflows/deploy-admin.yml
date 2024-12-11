@@ -5,6 +5,8 @@ on:
     branches:
       # Change this if your production branch is not prod
       - prod
+      # remove after development
+      - feature/9-add-admin-ui-deployment
 
 permissions:
   contents: read
