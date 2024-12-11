@@ -1,13 +1,29 @@
 /**
  * Server entry point for serving the admin UI.
  */
-import * as http from 'node:http';
+import { dirname } from 'node:path';
+import fastify from 'fastify';
+import fastifyStatic from '@fastify/static';
 
-const server = http.createServer((req, res) => {
-  res.writeHead(200, { 'Content-Type': 'text/plain' });
-  res.end('Hello, world!');
+const app = fastify();
+
+const root = dirname(new URL(import.meta.url).pathname);
+console.log('Serving static files from', root);
+
+app.register(fastifyStatic, {
+  root,
 });
 
-server.listen(process.env.PORT ?? 3000, () => {
-  console.log('Listening at http://localhost:3000');
+app.setNotFoundHandler((_, res) => {
+  res.sendFile('index.html');
+});
+
+const host = '0.0.0.0';
+const port = process.env.PORT ?? 3000;
+
+app.listen({ host, port }, (err, address) => {
+  if (err) {
+    throw err;
+  }
+  console.log(`Listening at http://localhost:${port}`);
 });
