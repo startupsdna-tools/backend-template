@@ -3,10 +3,9 @@ name: Build and Deploy (admin-ui)
 on:
   push:
     branches:
-      # Change this if your production branch is not prod
+      # Change if your branches are different
+      - main
       - prod
-      # remove after development
-      - feature/9-add-admin-ui-deployment
 
 permissions:
   contents: read
