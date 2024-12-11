@@ -1,0 +1,63 @@
+name: Build and Deploy (admin-ui)
+
+on:
+  push:
+    branches:
+      # Change if your branches are different
+      - main
+      - prod
+
+permissions:
+  contents: read
+
+env:
+  GCP_PROJECT: ${{ vars.GCP_PROJECT }}
+  GCP_REGION: ${{ vars.GCP_REGION }}
+  DOCKER_REPOSITORY: ${{ vars.DOCKER_REPOSITORY }}
+
+jobs:
+
+  build:
+    name: Build (admin-ui)
+    runs-on: ubuntu-latest
+    environment: prod
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 9
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'pnpm'
+      - name: Google Auth
+        uses: google-github-actions/auth@v2
+        with:
+          credentials_json: "${{ secrets.GCP_CREDENTIALS }}"
+      - name: Install Dependencies
+        run: pnpm install --frozen-lockfile
+      - name: Docker Auth
+        run: ./deployment/utils/docker-auth.sh
+      - name: Build
+        run: ./deployment/admin-ui/build.sh
+
+  deploy:
+    name: Deploy (admin-ui)
+    needs:
+      - build
+    runs-on: ubuntu-latest
+    environment: prod
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+      - name: Google Auth
+        uses: google-github-actions/auth@v2
+        with:
+          credentials_json: "${{ secrets.GCP_CREDENTIALS }}"
+      - name: Deploy
+        run: ./deployment/admin-ui/deploy.sh
