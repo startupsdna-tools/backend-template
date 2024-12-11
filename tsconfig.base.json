@@ -12,7 +12,9 @@
     "skipLibCheck": true,
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
-    "paths": {}
+    "paths": {
+      "@app/admin-auth-ui": ["libs/admin-auth-ui/src/index.ts"]
+    }
   },
   "exclude": ["node_modules", "tmp"]
 }
