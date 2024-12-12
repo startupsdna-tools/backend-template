@@ -1,10 +1,12 @@
-name: Build and Deploy
+name: Build and Deploy (api)
 
 on:
   push:
     branches:
-      # Change this if your production branch is not prod
+      # Change if your branches are different
+      - main
       - prod
+  workflow_dispatch:
 
 permissions:
   contents: read
