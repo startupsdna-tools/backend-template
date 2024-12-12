@@ -42,6 +42,9 @@ jobs:
         run: ./deployment/utils/docker-auth.sh
       - name: Build
         run: ./deployment/admin-ui/build.sh
+        env:
+          VITE_ADMIN_AUTH_API_KEY: ${{ vars.ADMIN_AUTH_API_KEY }}
+          VITE_ADMIN_AUTH_TENANT_ID: ${{ vars.ADMIN_AUTH_TENANT_ID }}
 
   deploy:
     name: Deploy (admin-ui)
