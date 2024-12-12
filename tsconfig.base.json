@@ -8,11 +8,16 @@
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
     "importHelpers": true,
+    "module": "ESNext",
+    "moduleResolution": "Node",
     "lib": ["es2020", "dom"],
     "skipLibCheck": true,
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
-    "paths": {}
+    "paths": {
+      "@app/admin-auth": ["libs/admin-auth/src/index.ts"],
+      "@app/admin-auth-ui": ["libs/admin-auth-ui/src/index.ts"]
+    }
   },
   "exclude": ["node_modules", "tmp"]
 }
