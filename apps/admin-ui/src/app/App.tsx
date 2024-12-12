@@ -9,6 +9,7 @@ import { addApiTokenInterceptor, apiClient } from './apiClient';
 import { Dashboard } from '../dashboard';
 import { PostsResource } from '../posts';
 import { ApiClientProvider } from '../common';
+import { Layout } from './Layout';
 
 export function App() {
   const authProvider = getFirebaseAuthProvider({
@@ -27,6 +28,7 @@ export function App() {
           authProvider={authProvider}
           loginPage={LoginPage}
           dashboard={Dashboard}
+          layout={Layout}
           requireAuth={true}
         >
           {PostsResource}
