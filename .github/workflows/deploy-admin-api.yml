@@ -1,4 +1,4 @@
-name: Build and Deploy (admin-ui)
+name: Build and Deploy (admin-api)
 
 on:
   push:
@@ -18,7 +18,7 @@ env:
 
 jobs:
   build:
-    name: Build (admin-ui)
+    name: Build (admin-api)
     runs-on: ubuntu-latest
     environment: prod
     steps:
@@ -42,14 +42,10 @@ jobs:
       - name: Docker Auth
         run: ./deployment/utils/docker-auth.sh
       - name: Build
-        run: ./deployment/admin-ui/build.sh
-        env:
-          VITE_ADMIN_AUTH_API_KEY: ${{ vars.ADMIN_AUTH_API_KEY }}
-          VITE_ADMIN_AUTH_TENANT_ID: ${{ vars.ADMIN_AUTH_TENANT_ID }}
-          VITE_ADMIN_API_BASE_URL: ${{ vars.ADMIN_API_BASE_URL }}
+        run: ./deployment/admin-api/build.sh
 
   deploy:
-    name: Deploy (admin-ui)
+    name: Deploy (admin-api)
     needs:
       - build
     runs-on: ubuntu-latest
@@ -64,4 +60,4 @@ jobs:
         with:
           credentials_json: "${{ secrets.GCP_CREDENTIALS }}"
       - name: Deploy
-        run: ./deployment/admin-ui/deploy.sh
+        run: ./deployment/admin-api/deploy.sh
