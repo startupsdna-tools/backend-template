@@ -10,8 +10,10 @@ import { Dashboard } from '../dashboard';
 import { PostsResource } from '../posts';
 import { ApiClientProvider } from '../common';
 import { Layout } from './Layout';
+import { ApiDataProvider } from './apiDataProvider';
 
 export function App() {
+  const dataProvider = new ApiDataProvider(apiClient);
   const authProvider = getFirebaseAuthProvider({
     firebase: {
       apiKey: import.meta.env.VITE_ADMIN_AUTH_API_KEY,
@@ -25,6 +27,7 @@ export function App() {
     <BrowserRouter>
       <ApiClientProvider value={apiClient}>
         <Admin
+          dataProvider={dataProvider}
           authProvider={authProvider}
           loginPage={LoginPage}
           dashboard={Dashboard}
