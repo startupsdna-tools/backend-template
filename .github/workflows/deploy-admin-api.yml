@@ -6,7 +6,6 @@ on:
       # Change if your branches are different
       - main
       - prod
-      - deploy-admin-api
   workflow_dispatch:
 
 permissions:
