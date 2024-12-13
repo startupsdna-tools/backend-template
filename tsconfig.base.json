@@ -15,7 +15,6 @@
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
-      "@app/admin-auth": ["libs/admin-auth/src/index.ts"],
       "@app/admin-auth-ui": ["libs/admin-auth-ui/src/index.ts"]
     }
   },

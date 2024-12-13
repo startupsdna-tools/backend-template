@@ -1,7 +1,12 @@
+import { Datagrid, List, TextField } from 'react-admin';
+
 export function PostsList() {
   return (
-    <>
-      <h1>Posts</h1>
-    </>
+    <List>
+      <Datagrid>
+        <TextField source="id" />
+        <TextField source="title" />
+      </Datagrid>
+    </List>
   );
 }
