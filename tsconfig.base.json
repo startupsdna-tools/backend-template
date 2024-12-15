@@ -15,7 +15,8 @@
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
-      "@app/admin-auth-ui": ["libs/admin-auth-ui/src/index.ts"]
+      "@app/admin-auth-ui": ["libs/admin-auth-ui/src/index.ts"],
+      "@app/firebase-jwt": ["libs/firebase-jwt/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]
