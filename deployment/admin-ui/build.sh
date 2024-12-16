@@ -6,9 +6,6 @@ set -eu
 # Load environment variables
 source ./deployment/admin-ui/_vars.sh
 
-# Build dist
-npx nx run admin-ui:build
-
 # Build & push 'admin-ui' docker image
 docker build \
   --platform linux/amd64 \
