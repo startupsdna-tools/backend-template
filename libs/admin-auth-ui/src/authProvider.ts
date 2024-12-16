@@ -37,15 +37,14 @@ export function getFirebaseAuthProvider(
     FirebaseAuth.browserLocalPersistence,
   );
 
-  let idToken: string | undefined;
-  FirebaseAuth.onIdTokenChanged(auth, async (user) => {
-    idToken = await user?.getIdToken();
-  });
-
   async function getCurrentUser() {
     await ready;
     await auth.authStateReady();
-    const currentUser = auth.currentUser;
+    return auth.currentUser;
+  }
+
+  async function getCurrentUserOrThrow() {
+    const currentUser = await getCurrentUser();
     if (!currentUser) {
       throw new Error('Unauthorized');
     }
@@ -58,7 +57,8 @@ export function getFirebaseAuthProvider(
     },
 
     async getIdToken() {
-      return idToken;
+      const currentUser = await getCurrentUser();
+      return currentUser?.getIdToken();
     },
 
     async login({ email, password }: { email: string; password: string }) {
@@ -71,7 +71,7 @@ export function getFirebaseAuthProvider(
     },
 
     async checkAuth() {
-      return getCurrentUser()
+      return getCurrentUserOrThrow()
         .then(() => Promise.resolve())
         .catch(() => {
           return Promise.reject({
@@ -83,7 +83,7 @@ export function getFirebaseAuthProvider(
     },
 
     async getIdentity(): Promise<UserIdentity> {
-      const user = await getCurrentUser();
+      const user = await getCurrentUserOrThrow();
       return {
         id: user.uid,
         fullName: user.displayName || user.email || undefined,
@@ -113,7 +113,7 @@ export function getFirebaseAuthProvider(
     },
 
     async update(data: AccountUpdateDto) {
-      const currentUser = await getCurrentUser();
+      const currentUser = await getCurrentUserOrThrow();
       await FirebaseAuth.updateProfile(currentUser, {
         displayName: data.fullName,
       });
