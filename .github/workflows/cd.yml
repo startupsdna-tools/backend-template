@@ -1,0 +1,102 @@
+name: Build and Deploy
+
+on:
+  push:
+    branches:
+      # Change if your branches are different
+      - main
+      - prod
+      - refactor/19-join-deploy-cd-pipelines-2
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+env:
+  GCP_PROJECT: ${{ vars.GCP_PROJECT }}
+  GCP_REGION: ${{ vars.GCP_REGION }}
+  DOCKER_REPOSITORY: ${{ vars.DOCKER_REPOSITORY }}
+
+jobs:
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+    environment: prod
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 9
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: "pnpm"
+      - name: Install Dependencies
+        run: pnpm install --frozen-lockfile
+      - name: Build Projects
+        run: npx nx run-many --target=build --all
+      - uses: actions/upload-artifact@v4
+        with:
+          name: dist
+          path: ./dist
+          if-no-files-found: 'error'
+
+  build_docker:
+    name: Build docker images
+    needs:
+      - build
+    runs-on: ubuntu-latest
+    environment: prod
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/download-artifact@v4
+        with:
+          name: dist
+          path: ./dist
+      - name: Google Auth
+        uses: google-github-actions/auth@v2
+        with:
+          credentials_json: "${{ secrets.GCP_CREDENTIALS }}"
+      - name: Docker Auth
+        run: ./deployment/utils/docker-auth.sh
+      - name: Build docker image (api)
+        run: ./deployment/api/build.sh
+      - name: Build docker image (admin-api)
+        run: ./deployment/admin-api/build.sh
+      - name: Build docker image (admin-ui)
+        run: ./deployment/admin-ui/build.sh
+        env:
+          VITE_ADMIN_AUTH_API_KEY: ${{ vars.ADMIN_AUTH_API_KEY }}
+          VITE_ADMIN_AUTH_TENANT_ID: ${{ vars.ADMIN_AUTH_TENANT_ID }}
+          VITE_ADMIN_API_BASE_URL: ${{ vars.ADMIN_API_BASE_URL }}
+
+  deploy:
+    name: Deploy
+    needs:
+      - build_docker
+    runs-on: ubuntu-latest
+    environment: prod
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Google Auth
+        uses: google-github-actions/auth@v2
+        with:
+          credentials_json: "${{ secrets.GCP_CREDENTIALS }}"
+      - name: Deploy (api)
+        run: ./deployment/api/deploy.sh
+      - name: Deploy (admin-api)
+        run: ./deployment/admin-api/deploy.sh
+        env:
+          ADMIN_AUTH_PROJECT_ID: ${{ vars.GCP_PROJECT }}
+          ADMIN_AUTH_TENANT_ID: ${{ vars.ADMIN_AUTH_TENANT_ID }}
+      - name: Deploy (admin-ui)
+        run: ./deployment/admin-ui/deploy.sh
