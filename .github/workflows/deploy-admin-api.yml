@@ -61,3 +61,6 @@ jobs:
           credentials_json: "${{ secrets.GCP_CREDENTIALS }}"
       - name: Deploy
         run: ./deployment/admin-api/deploy.sh
+        env:
+          ADMIN_AUTH_PROJECT_ID: ${{ vars.GCP_PROJECT }}
+          ADMIN_AUTH_TENANT_ID: ${{ vars.ADMIN_AUTH_TENANT_ID }}

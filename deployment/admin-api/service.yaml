@@ -6,4 +6,9 @@ spec:
   template:
     spec:
       containers:
-        - image: docker-image
+        - image: ${ADMIN_API_DOCKER_IMAGE}
+          env:
+            - name: ADMIN_AUTH_PROJECT_ID
+              value: ${ADMIN_AUTH_PROJECT_ID}
+            - name: ADMIN_AUTH_TENANT_ID
+              value: ${ADMIN_AUTH_TENANT_ID}
