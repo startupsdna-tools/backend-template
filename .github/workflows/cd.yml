@@ -6,7 +6,6 @@ on:
       # Change if your branches are different
       - main
       - prod
-      - refactor/19-join-deploy-cd-pipelines
   workflow_dispatch:
 
 permissions:
