@@ -1,4 +1,5 @@
 import Fastify from 'fastify';
+import { createGcpLoggingPinoConfig } from '@google-cloud/pino-logging-gcp-config';
 import { app } from './app/app';
 
 const isGcp = process.env.K_SERVICE !== undefined;
@@ -6,11 +7,28 @@ const host = process.env.HOST ?? '0.0.0.0';
 const port = Number(process.env.ADMIN_API_PORT ?? process.env.PORT ?? 3000);
 const prefix = process.env.ADMIN_API_PREFIX ?? '/api';
 
+// Configure logging
+const logger = isGcp
+  ? createGcpLoggingPinoConfig({
+      serviceContext: {
+        service: 'admin-api',
+      },
+    })
+  : true;
+
 // Instantiate Fastify with some config
 const server = Fastify({
-  logger: true,
+  logger: logger,
   disableRequestLogging: isGcp,
 });
+
+// Add additional error logging for GCP by hooking into the onError lifecycle.
+// This is necessary because we disable request logging when running on GCP.
+if (isGcp) {
+  server.addHook('onError', async (_, __, error) => {
+    server.log.error(error);
+  });
+}
 
 // Register your application as a normal plugin.
 server.register(app, { prefix });
@@ -20,7 +38,5 @@ server.listen({ port, host }, (err) => {
   if (err) {
     server.log.error(err);
     process.exit(1);
-  } else {
-    console.log(`[ ready ] http://${host}:${port}`);
   }
 });

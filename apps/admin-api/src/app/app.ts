@@ -3,6 +3,7 @@ import { FastifyInstance } from 'fastify';
 import AutoLoad from '@fastify/autoload';
 import { fastifyAuth } from '@fastify/auth';
 import { adminAuth } from '../features/auth';
+import { logging } from '../features/logging';
 import posts from '../features/posts';
 
 /* eslint-disable-next-line */
@@ -23,7 +24,10 @@ export async function app(fastify: FastifyInstance, opts: AppOptions) {
   });
 
   // Public routes
-  fastify.get('/', () => ({ message: 'works' }));
+  fastify.register(async (fastify) => {
+    fastify.get('/', () => ({ message: 'works' }));
+    fastify.register(logging);
+  });
 
   // Protected routes
   fastify.register(async (fastify) => {
