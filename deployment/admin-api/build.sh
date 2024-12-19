@@ -7,8 +7,9 @@ set -eu
 source ./deployment/admin-api/_vars.sh
 
 # Build & push 'admin-api' docker image
-docker build \
+docker buildx build \
+  ${DOCKER_BUILD_CACHE} \
   --platform linux/amd64 \
   --tag ${ADMIN_API_DOCKER_IMAGE} \
+  --push
   --file ./deployment/admin-api/Dockerfile .
-docker push ${ADMIN_API_DOCKER_IMAGE}

@@ -13,6 +13,7 @@ env:
   GCP_PROJECT: ${{ vars.GCP_PROJECT }}
   GCP_REGION: ${{ vars.GCP_REGION }}
   DOCKER_REPOSITORY: ${{ vars.DOCKER_REPOSITORY }}
+  DOCKER_REGISTRY: ${{ vars.GCP_REGION }}-docker.pkg.dev/${{ vars.GCP_PROJECT }}/${{ vars.DOCKER_REPOSITORY }}
 
 jobs:
   build:
@@ -45,7 +46,7 @@ jobs:
           path: ./dist
           if-no-files-found: "error"
 
-  build_docker-api:
+  with_action:
     name: Build docker image (api)
     needs:
       - build
@@ -65,5 +66,41 @@ jobs:
           credentials_json: "${{ secrets.GCP_CREDENTIALS }}"
       - name: Docker auth
         run: ./deployment/utils/docker-auth.sh
+      - name: Setup Docker Buildx
+        uses: docker/setup-buildx-action@v3
+      - name: Build & push docker image
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          file: ./deployment/api/Dockerfile
+          tags: |
+            ${{ env.DOCKER_REGISTRY }}/api:test
+          push: true
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+        env:
+          DOCKER_BUILD_RECORD_UPLOAD: false
+
+  with_script:
+    name: Build docker image (api)
+    needs:
+      - build
+    runs-on: ubuntu-latest
+    environment: prod
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/download-artifact@v4
+        with:
+          name: dist
+          path: ./dist
+      - uses: google-github-actions/auth@v2
+        with:
+          credentials_json: "${{ secrets.GCP_CREDENTIALS }}"
+      - name: Docker auth
+        run: ./deployment/utils/docker-auth.sh
+      - uses: docker/setup-buildx-action@v3
       - name: Build & Push Docker image
         run: ./deployment/api/build.sh

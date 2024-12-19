@@ -7,8 +7,9 @@ set -eu
 source ./deployment/api/_vars.sh
 
 # Build & push 'api' docker image
-docker build \
+docker buildx build \
+  ${DOCKER_BUILD_CACHE} \
   --platform linux/amd64 \
   --tag ${API_DOCKER_IMAGE} \
+  --push \
   --file ./deployment/api/Dockerfile .
-docker push ${API_DOCKER_IMAGE}

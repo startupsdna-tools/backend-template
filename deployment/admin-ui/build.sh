@@ -7,8 +7,9 @@ set -eu
 source ./deployment/admin-ui/_vars.sh
 
 # Build & push 'admin-ui' docker image
-docker build \
+docker buildx build \
+  ${DOCKER_BUILD_CACHE} \
   --platform linux/amd64 \
   --tag ${ADMIN_UI_DOCKER_IMAGE} \
+  --push
   --file ./deployment/admin-ui/Dockerfile .
-docker push ${ADMIN_UI_DOCKER_IMAGE}
