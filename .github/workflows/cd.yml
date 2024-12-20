@@ -6,7 +6,6 @@ on:
     branches:
       # Change if your branches are different
       - prod
-      - feature/29-environment-by-branch
 
 permissions:
   contents: read
