@@ -1,13 +1,12 @@
 name: Build and Deploy
 
 on:
+  workflow_dispatch:
   push:
     branches:
       # Change if your branches are different
-      - main
       - prod
       - feature/29-environment-by-branch
-  workflow_dispatch:
 
 permissions:
   contents: read
@@ -18,10 +17,29 @@ env:
   DOCKER_REPOSITORY: ${{ vars.DOCKER_REPOSITORY }}
 
 jobs:
+  define_environment:
+    name: Define environment
+    runs-on: ubuntu-latest
+    outputs:
+      name: ${{ steps.set.outputs.environment }}
+    steps:
+      - name: Set environment as output
+        id: set
+        # Change this if your branches are different
+        run: |
+          if [[ "${GITHUB_REF_NAME}" == "prod" ]]; then
+            echo "environment=prod" >> $GITHUB_OUTPUT
+          else
+            echo "environment=prod" >> $GITHUB_OUTPUT
+          fi
+
   build:
     name: Build projects
     runs-on: ubuntu-latest
-    environment: prod
+    environment:
+      name: ${{ needs.define_environment.outputs.name }}
+    needs:
+      - define_environment
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -51,9 +69,11 @@ jobs:
   build_docker-api:
     name: Build docker image (api)
     needs:
+      - define_environment
       - build
     runs-on: ubuntu-latest
-    environment: prod
+    environment:
+      name: ${{ needs.define_environment.outputs.name }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -74,9 +94,11 @@ jobs:
   deploy-api:
     name: Deploy (api)
     needs:
+      - define_environment
       - build_docker-api
     runs-on: ubuntu-latest
-    environment: prod
+    environment:
+      name: ${{ needs.define_environment.outputs.name }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -92,9 +114,11 @@ jobs:
   build_docker-admin-api:
     name: Build docker image (admin-api)
     needs:
+      - define_environment
       - build
     runs-on: ubuntu-latest
-    environment: prod
+    environment:
+      name: ${{ needs.define_environment.outputs.name }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -115,9 +139,11 @@ jobs:
   deploy-admin-api:
     name: Deploy (admin-api)
     needs:
+      - define_environment
       - build_docker-admin-api
     runs-on: ubuntu-latest
-    environment: prod
+    environment:
+      name: ${{ needs.define_environment.outputs.name }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -136,9 +162,11 @@ jobs:
   build_docker-admin-ui:
     name: Build docker image (admin-ui)
     needs:
+      - define_environment
       - build
     runs-on: ubuntu-latest
-    environment: prod
+    environment:
+      name: ${{ needs.define_environment.outputs.name }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -159,9 +187,11 @@ jobs:
   deploy-admin-ui:
     name: Deploy (admin-ui)
     needs:
+      - define_environment
       - build_docker-admin-ui
     runs-on: ubuntu-latest
-    environment: prod
+    environment:
+      name: ${{ needs.define_environment.outputs.name }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4
