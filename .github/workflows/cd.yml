@@ -6,6 +6,7 @@ on:
       # Change if your branches are different
       - main
       - prod
+      - feature/29-environment-by-branch
   workflow_dispatch:
 
 permissions:
