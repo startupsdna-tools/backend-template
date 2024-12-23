@@ -34,6 +34,7 @@ yarn-error.log
 testem.log
 /typings
 vite.config.*.timestamp*
+vitest.config.*.timestamp*
 
 # System Files
 .DS_Store
@@ -45,3 +46,4 @@ Thumbs.db
 # Env local overrides
 .env.local
 .env.*.local
+*.local.env
