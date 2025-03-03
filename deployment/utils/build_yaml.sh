@@ -3,7 +3,7 @@
 # Util scripts for building yaml files.
 # Creates a new yaml file from a template and replaces all string values with environment variables.
 # Returns the path to the new yaml file.
-# Usage: bash ./deployment/utils/build_yaml.sh <SRC> <DEST>
+# Usage: SPEC=$(./deployment/utils/build_yaml.sh <SRC>)
 
 # enable strict mode
 set -eu
