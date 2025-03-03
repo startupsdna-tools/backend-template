@@ -1,0 +1,17 @@
+{
+  "name": "docker",
+  "$schema": "../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "docker",
+  "projectType": "application",
+  "targets": {
+    "up": {
+      "command": "docker compose -f {projectRoot}/compose.yml up -d",
+      "defaultConfiguration": "development"
+    },
+    "down": {
+      "command": "docker compose -f {projectRoot}/compose.yml down --volumes",
+      "defaultConfiguration": "development"
+    }
+  },
+  "tags": []
+}
