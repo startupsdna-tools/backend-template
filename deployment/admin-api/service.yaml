@@ -6,7 +6,7 @@ spec:
   template:
     spec:
       containers:
-        - image: ${ADMIN_API_DOCKER_IMAGE}
+        - image: ${DOCKER_IMAGE_DIGEST}
           env:
             - name: ADMIN_AUTH_PROJECT_ID
               value: ${ADMIN_AUTH_PROJECT_ID}

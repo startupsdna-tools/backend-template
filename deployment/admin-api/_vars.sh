@@ -1,6 +1,6 @@
 # Load common variables
 source ./deployment/_vars.sh
 
-# API app variables
-export ADMIN_API_DOCKER_IMAGE="${DOCKER_REGISTRY}/admin-api:${BUILD_VERSION}"
-
+# Docker variables
+export DOCKER_IMAGE="${DOCKER_REGISTRY}/admin-api"
+export DOCKER_IMAGE_TAG="${DOCKER_IMAGE}:${DOCKER_TAG}"

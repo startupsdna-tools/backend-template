@@ -6,9 +6,14 @@ set -eu
 # Load environment variables
 source ./deployment/admin-api/_vars.sh
 
-# Build & push 'admin-api' docker image
+echo "> Building docker image ${DOCKER_IMAGE_TAG}"
 docker build \
   --platform linux/amd64 \
-  --tag ${ADMIN_API_DOCKER_IMAGE} \
+  --tag ${DOCKER_IMAGE_TAG} \
+  --label "git.branch=${GIT_BRANCH}" \
+  --label "git.commit=${GIT_COMMIT}" \
+  --label "git.commit.message=${GIT_COMMIT_MESSAGE}" \
   --file ./deployment/admin-api/Dockerfile .
-docker push ${ADMIN_API_DOCKER_IMAGE}
+
+echo "> Pushing docker image ${DOCKER_IMAGE_TAG}"
+docker push ${DOCKER_IMAGE_TAG}
