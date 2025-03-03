@@ -6,9 +6,14 @@ set -eu
 # Load environment variables
 source ./deployment/api/_vars.sh
 
-# Build & push 'api' docker image
+echo "> Building docker image ${DOCKER_IMAGE_TAG}"
 docker build \
   --platform linux/amd64 \
-  --tag ${API_DOCKER_IMAGE} \
+  --tag ${DOCKER_IMAGE_TAG} \
+  --label "git.branch=${GIT_BRANCH}" \
+  --label "git.commit=${GIT_COMMIT}" \
+  --label "git.commit.message=${GIT_COMMIT_MESSAGE}" \
   --file ./deployment/api/Dockerfile .
-docker push ${API_DOCKER_IMAGE}
+
+echo "> Pushing docker image ${DOCKER_IMAGE_TAG}"
+docker push ${DOCKER_IMAGE_TAG}

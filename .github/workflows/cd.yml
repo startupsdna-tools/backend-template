@@ -6,6 +6,7 @@ on:
     branches:
       # Change if your branches are different
       - prod
+      - upd/32-resolve-docker-image-digest
 
 permissions:
   contents: read

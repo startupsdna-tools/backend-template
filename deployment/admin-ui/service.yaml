@@ -6,4 +6,4 @@ spec:
   template:
     spec:
       containers:
-        - image: docker-image
+        - image: ${DOCKER_IMAGE_DIGEST}

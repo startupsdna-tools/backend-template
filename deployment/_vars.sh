@@ -5,4 +5,4 @@ export GIT_COMMIT_MESSAGE="$(git log -1 --pretty=%B HEAD)"
 
 # Docker variables
 export DOCKER_REGISTRY="${GCP_REGION}-docker.pkg.dev/${GCP_PROJECT}/${DOCKER_REPOSITORY}"
-export BUILD_VERSION="${GIT_COMMIT}"
+export DOCKER_TAG="latest"
