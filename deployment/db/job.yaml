@@ -1,0 +1,24 @@
+apiVersion: run.googleapis.com/v1
+kind: Job
+metadata:
+  name: db
+spec:
+  template:
+    spec:
+      parallelism: 1
+      taskCount: 1
+      template:
+        spec:
+          maxRetries: 1
+          containers:
+            - image: ${DOCKER_IMAGE_DIGEST}
+              args:
+                - "pnpm"
+                - "drizzle-kit"
+                - "migrate"
+              env:
+#                - name: DATABASE_URL
+#                  valueFrom:
+#                    secretKeyRef:
+#                      name: DATABASE_URL
+#                      key: latest

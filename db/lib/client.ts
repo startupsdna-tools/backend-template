@@ -1,5 +1,5 @@
 import { drizzle } from 'drizzle-orm/node-postgres';
-import config from '@app/config/db';
+import { config } from '../config';
 import * as schema from './schema';
 
 export type DbClient = ReturnType<typeof createDbClient>;

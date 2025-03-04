@@ -1,7 +1,7 @@
 import { URL } from 'node:url';
 import env from 'getenv';
 
-const config = {
+export const config = {
   url: env(
     'DATABASE_URL',
     'postgresql://postgres:secret@localhost:5432/app?schema=public',
@@ -16,5 +16,3 @@ if (process.env.NODE_ENV === 'test') {
   url.pathname = `${url.pathname}_test`;
   config.url = url.toString();
 }
-
-export default config;

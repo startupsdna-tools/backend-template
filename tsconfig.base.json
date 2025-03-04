@@ -16,7 +16,6 @@
     "baseUrl": ".",
     "paths": {
       "@app/admin-auth-ui": ["libs/admin-auth-ui/src/index.ts"],
-      "@app/config/*": ["config/*.ts"],
       "@app/db": ["db/index.ts"],
       "@app/db/testing": ["db/testing/index.ts"],
       "@app/firebase-jwt": ["libs/firebase-jwt/src/index.ts"]
