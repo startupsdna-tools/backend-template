@@ -11,6 +11,7 @@ RUN pnpm install
 
 # Copy drizzle-kit files
 COPY ./db/drizzle.config.ts ./db/config.ts ./
+COPY ./db/migrations ./migrations
 
 ARG NODE_ENV=production
 ENV NODE_ENV=$NODE_ENV
