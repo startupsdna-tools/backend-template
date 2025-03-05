@@ -3,7 +3,7 @@ import env from 'getenv';
 
 export const config = {
   url: env(
-    'DATABASE_URL',
+    'DB_URL',
     'postgresql://postgres:secret@localhost:5432/app?schema=public',
   ),
   logger: env('DB_LOGGER', 'false') === 'true',

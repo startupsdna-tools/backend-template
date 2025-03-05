@@ -7,3 +7,9 @@ spec:
     spec:
       containers:
         - image: ${DOCKER_IMAGE_DIGEST}
+          env:
+#            - name: DB_URL
+#              valueFrom:
+#                secretKeyRef:
+#                  name: DB_URL
+#                  key: latest

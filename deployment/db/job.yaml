@@ -17,8 +17,8 @@ spec:
                 - "drizzle-kit"
                 - "migrate"
               env:
-#                - name: DATABASE_URL
+#                - name: DB_URL
 #                  valueFrom:
 #                    secretKeyRef:
-#                      name: DATABASE_URL
+#                      name: DB_URL
 #                      key: latest

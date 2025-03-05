@@ -12,3 +12,8 @@ spec:
               value: ${ADMIN_AUTH_PROJECT_ID}
             - name: ADMIN_AUTH_TENANT_ID
               value: ${ADMIN_AUTH_TENANT_ID}
+#            - name: DB_URL
+#              valueFrom:
+#                secretKeyRef:
+#                  name: DB_URL
+#                  key: latest
