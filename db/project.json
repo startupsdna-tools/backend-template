@@ -27,6 +27,12 @@
       "options": {
         "cwd": "./db"
       }
+    },
+    "drizzle-kit": {
+      "command": "drizzle-kit",
+      "options": {
+        "cwd": "./db"
+      }
     }
   }
 }

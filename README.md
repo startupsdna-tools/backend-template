@@ -15,6 +15,7 @@ nx run db:push # sync the database with the current schema
 nx run db:push:test # sync the test database with the current schema
 nx run db:studio # launch the Drizzle studio UI
 nx run db:generate # generate migration for latest database changes
+nx run db:drizzle-kit <command> # run any Drizzle CLI command
 ```
 
 For more information refer to the following:
