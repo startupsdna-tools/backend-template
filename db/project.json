@@ -1,0 +1,38 @@
+{
+  "name": "db",
+  "$schema": "../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "db",
+  "projectType": "library",
+  "tags": [],
+  "targets": {
+    "push": {
+      "command": "drizzle-kit push",
+      "defaultConfiguration": "development",
+      "configurations": {
+        "development": {},
+        "test": {}
+      },
+      "options": {
+        "cwd": "./db"
+      }
+    },
+    "generate": {
+      "command": "drizzle-kit generate",
+      "options": {
+        "cwd": "./db"
+      }
+    },
+    "studio": {
+      "command": "drizzle-kit studio",
+      "options": {
+        "cwd": "./db"
+      }
+    },
+    "drizzle-kit": {
+      "command": "drizzle-kit",
+      "options": {
+        "cwd": "./db"
+      }
+    }
+  }
+}

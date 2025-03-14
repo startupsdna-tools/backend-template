@@ -202,3 +202,45 @@ jobs:
           credentials_json: "${{ secrets.GCP_CREDENTIALS }}"
       - name: Deploy
         run: ./deployment/admin-ui/deploy.sh
+
+  build_docker-db:
+    name: Build docker image (db)
+    needs:
+      - define_environment
+    runs-on: ubuntu-latest
+    environment:
+      name: ${{ needs.define_environment.outputs.name }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: google-github-actions/auth@v2
+        with:
+          credentials_json: "${{ secrets.GCP_CREDENTIALS }}"
+      - name: Docker auth
+        run: ./deployment/utils/docker-auth.sh
+      - name: Build & Push Docker image
+        run: ./deployment/db/build.sh
+
+  deploy-db:
+    # The following line can be removed. Used for testing purposes.
+    if: ${{ vars.DISABLE_DB_MIGRATION != 'true' }}
+    name: Deploy (db)
+    needs:
+      - define_environment
+      - build_docker-db
+    runs-on: ubuntu-latest
+    environment:
+      name: ${{ needs.define_environment.outputs.name }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Google auth
+        uses: google-github-actions/auth@v2
+        with:
+          credentials_json: "${{ secrets.GCP_CREDENTIALS }}"
+      - name: Deploy
+        run: ./deployment/db/deploy.sh
